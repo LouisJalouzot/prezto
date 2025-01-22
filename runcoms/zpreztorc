@@ -209,14 +209,14 @@ zstyle ':prezto:module:prompt' theme 'powerlevel10k'
 #   'line' \
 #   'cursor' \
 #   'root'
-#
-# Set syntax highlighting styles.
+
+# # Set syntax highlighting styles.
 # zstyle ':prezto:module:syntax-highlighting' styles \
 #   'builtin' 'bg=blue' \
 #   'command' 'bg=blue' \
 #   'function' 'bg=blue'
-#
-# Set syntax pattern styles.
+
+# # Set syntax pattern styles.
 # zstyle ':prezto:module:syntax-highlighting' pattern \
 #   'rm*-rf*' 'fg=white,bold,bg=red'
 

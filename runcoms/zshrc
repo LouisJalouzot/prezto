@@ -23,7 +23,7 @@ function check_and_handle_venv() {
   if [[ -z "$VIRTUAL_ENV" ]]; then
     if [[ -d ./.venv ]]; then
       echo "📦 Activating virtual environment in $(pwd)/.venv"
-      source ./.venv/bin/activate
+      . .venv/bin/activate
     fi
   else
     parentdir="$(dirname "$VIRTUAL_ENV")"

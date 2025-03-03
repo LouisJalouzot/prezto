@@ -40,13 +40,12 @@ zstyle ':prezto:load' pmodule \
   'completion' \
   'history-substring-search' \
   'prompt' \
+  'git' \
   'syntax-highlighting' \
   'autosuggestions' \
   'command-not-found' \
   'history' \
-  'history-substring-search'
-  #  \
-  # 'git' \
+  'history-substring-search' \
 
 #
 # Autosuggestions

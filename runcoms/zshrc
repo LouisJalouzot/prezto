@@ -19,6 +19,11 @@ fi
 
 # Customize to your needs...
 
+# Key bindings
+bindkey '^H' backward-kill-word   # Ctrl+Backspace
+bindkey '^[[3;5~' kill-word       # Ctrl+Delete
+
+# Custom functions
 function check_and_handle_venv() {
   if [[ -z "$VIRTUAL_ENV" ]]; then
     if [[ -d ./.venv ]]; then
@@ -34,30 +39,47 @@ function check_and_handle_venv() {
   fi
 }
 
+# Check for virtual environment at login
+check_and_handle_venv
+
 function cd() {
   builtin cd "$@"
   check_and_handle_venv
 }
 
-co() {
-  exec connect tunnel
+alias t=tmux
+alias ta="tmux attach"
+alias tl="tmux ls"
+alias sm="squeue --me"
+alias wsync="wandb sync --sync-all"
+alias c=clear
+
+function wsync_loop() {
+  while true; do
+    wsync
+    sleep 5m
+  done
 }
 
-
-export PATH="$HOME/bin:$PATH"
-
+# Machine specific configurations
 if [[ "$(hostname)" == *"jean-zay"* ]]; then
   . "$HOME/.local/bin/env"
+  export PATH="$HOME/bin:$PATH"
   cd ~/work
-fi
+  
+  co() {
+    cleanup() {
+      echo "\nKilling code tunnel processes..."
+      pkill -f "tunnel service internal-run"
+    }
+    trap cleanup EXIT SIGHUP SIGINT SIGTERM SIGQUIT
+    connect tunnel
+  }
 
-# Check for virtual environment at login
-check_and_handle_venv
+  alias run_cpu="srun --cpus-per-task=6 --hint=nomultithread --partition=prepost --account=ioj@cpu --qos=qos_cpu-dev"
+  alias run_cpu48="srun --cpus-per-task=48 --hint=nomultithread --partition=prepost --account=ioj@cpu --qos=qos_cpu-dev"
+  alias run_h100="srun --gres=gpu:1 --constraint=h100 --cpus-per-task=24 --hint=nomultithread --account=ioj@h100 --qos=qos_gpu_h100-dev --time=2:00:00"
+fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# Custom functions
-alias t=tmux
-alias ta="tmux attach"
-alias sm="squeue --me"

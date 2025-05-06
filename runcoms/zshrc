@@ -17,7 +17,13 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
+# Source API keys if they exist
+if [[ -f "$HOME/.api_keys" ]]; then
+  source "$HOME/.api_keys"
+fi
+
 # Customize to your needs...
+unset SSH_ASKPASS
 
 # Key bindings
 bindkey '^H' backward-kill-word   # Ctrl+Backspace
@@ -53,6 +59,11 @@ alias tl="tmux ls"
 alias sm="squeue --me"
 alias wsync="wandb sync --sync-all"
 alias c=clear
+alias gco="git checkout"
+alias gcm="git commit -m"
+alias gpl="git pull"
+alias gplr="git pull --rebase"
+alias gps="git push"
 
 function wsync_loop() {
   while true; do
@@ -81,5 +92,17 @@ if [[ "$(hostname)" == *"jean-zay"* ]]; then
   alias run_h100="srun --gres=gpu:1 --constraint=h100 --cpus-per-task=24 --hint=nomultithread --account=ioj@h100 --qos=qos_gpu_h100-dev --time=2:00:00"
 fi
 
+if [[ "$(hostname)" == "ljalouzot" ]]; then
+  export PATH="$HOME/.local/bin:$PATH"
+  alias mount-unicog="sshfs unicog:/data/ljalouzot /home/ljalouzot/data/unicog"
+  alias mount-jz="sshfs jz:/lustre/fswork/projects/rech/ioj/uml34gj /home/ljalouzot/data/jz"
+  alias mount-coml="sshfs oberon:/scratch2/ljalouzot /home/ljalouzot/data/coml"
+fi
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/ljalouzot/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/home/ljalouzot/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/ljalouzot/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/ljalouzot/Downloads/google-cloud-sdk/completion.zsh.inc'; fi

@@ -94,15 +94,11 @@ fi
 
 if [[ "$(hostname)" == "ljalouzot" ]]; then
   export PATH="$HOME/.local/bin:$PATH"
-  alias mount-unicog="sshfs unicog:/data/ljalouzot /home/ljalouzot/data/unicog"
-  alias mount-jz="sshfs jz:/lustre/fswork/projects/rech/ioj/uml34gj /home/ljalouzot/data/jz"
-  alias mount-coml="sshfs oberon:/scratch2/ljalouzot /home/ljalouzot/data/coml"
+  export GTK_USE_PORTAL=1
+  alias mount-unicog="sshfs -o follow_symlinks unicog:/data/ljalouzot /home/ljalouzot/data/unicog"
+  alias mount-jz="sshfs -o follow_symlinks jz:/lustre/fswork/projects/rech/ioj/uml34gj /home/ljalouzot/data/jz"
+  alias mount-coml="sshfs -o follow_symlinks oberon:/scratch2/ljalouzot /home/ljalouzot/data/coml"
 fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/ljalouzot/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/home/ljalouzot/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/home/ljalouzot/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/ljalouzot/Downloads/google-cloud-sdk/completion.zsh.inc'; fi

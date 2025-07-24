@@ -5,6 +5,11 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# Source /usr/share/Modules/init/zsh if it exists
+if [[ -s "/usr/share/Modules/init/zsh" ]]; then
+  source /usr/share/Modules/init/zsh
+fi
+
 #
 # Executes commands at the start of an interactive session.
 #
@@ -73,23 +78,40 @@ function wsync_loop() {
 }
 
 # Machine specific configurations
-if [[ "$(hostname)" == *"jean-zay"* ]]; then
+if [[ "$(whoami)" == "uml34gj" ]]; then
+
   . "$HOME/.local/bin/env"
+
   export PATH="$HOME/bin:$PATH"
-  cd ~/work
-  
+  export UV_HTTP_TIMEOUT=36000
+  export TRANSFORMERS_OFFLINE=1 # job will try to fetch from cache instead of trying to download
+  export UV_NO_MANAGED_PYTHON=1 # disable uv's managed python, use system python instead
+
   co() {
     cleanup() {
       echo "\nKilling code tunnel processes..."
       pkill -f "tunnel service internal-run"
-    }
+    } 
     trap cleanup EXIT SIGHUP SIGINT SIGTERM SIGQUIT
     connect tunnel
   }
 
-  alias run_cpu="srun --cpus-per-task=6 --hint=nomultithread --partition=prepost --account=ioj@cpu --qos=qos_cpu-dev"
-  alias run_cpu48="srun --cpus-per-task=48 --hint=nomultithread --partition=prepost --account=ioj@cpu --qos=qos_cpu-dev"
-  alias run_h100="srun --gres=gpu:1 --constraint=h100 --cpus-per-task=24 --hint=nomultithread --account=ioj@h100 --qos=qos_gpu_h100-dev --time=2:00:00"
+  switch() {
+    if [ -z "$1" ]; then
+      echo "Usage: switch <environment_name>"
+      return 1
+    fi
+    eval $(idrenv -d $1)
+  }
+
+  alias run_cpu="srun --cpus-per-task=6 --hint=nomultithread --partition=prepost --account=ioj@cpu --qos=qos_cpu-dev --output=run_cpu.out --error=run_cpu.out"
+  alias run_cpu_interactive="srun --cpus-per-task=6 --hint=nomultithread --partition=prepost --account=ioj@cpu --qos=qos_cpu-dev --pty zsh -i"
+  alias run_cpu48="srun --cpus-per-task=48 --hint=nomultithread --partition=prepost --account=ioj@cpu --qos=qos_cpu-dev --output=run_cpu48.out --error=run_cpu48.out"
+  alias run_cpu48_interactive="srun --cpus-per-task=48 --hint=nomultithread --partition=prepost --account=ioj@cpu --qos=qos_cpu-dev --pty zsh -i"
+  alias run_cpu40_p1="srun --cpus-per-task=40 --hint=nomultithread --account=ioj@cpu --qos=qos_cpu-dev --output=run_cpu40_p1.out --error=run_cpu40_p1.out"
+  alias run_cpu40_p1_interactive="srun --cpus-per-task=40 --hint=nomultithread --account=ioj@cpu --qos=qos_cpu-dev --pty zsh -i"
+  alias run_h100="srun --gres=gpu:1 --constraint=h100 --cpus-per-task=24 --hint=nomultithread --account=ioj@h100 --qos=qos_gpu_h100-dev --time=2:00:00 --output=run_h100.out --error=run_h100.out"
+  alias run_h100_interactive="srun --gres=gpu:1 --constraint=h100 --cpus-per-task=24 --hint=nomultithread --account=ioj@h100 --qos=qos_gpu_h100-dev --time=2:00:00 --pty zsh -i"
 fi
 
 if [[ "$(hostname)" == "ljalouzot" ]]; then
@@ -102,3 +124,5 @@ fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# [[ ! -f ~/.conda_setup.sh ]] || source ~/.conda_setup.sh

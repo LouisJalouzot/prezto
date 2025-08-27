@@ -70,6 +70,10 @@ alias gpl="git pull"
 alias gplr="git pull --rebase"
 alias gps="git push"
 
+function llmg() {
+  llm "$@" | glow -
+}
+
 function wsync_loop() {
   while true; do
     wsync
@@ -118,8 +122,11 @@ if [[ "$(hostname)" == "ljalouzot" ]]; then
   export PATH="$HOME/.local/bin:$PATH"
   export GTK_USE_PORTAL=1
   alias mount-unicog="sshfs -o follow_symlinks unicog:/data/ljalouzot /home/ljalouzot/data/unicog"
-  alias mount-jz="sshfs -o follow_symlinks jz:/lustre/fswork/projects/rech/ioj/uml34gj /home/ljalouzot/data/jz"
+  alias mount-jz="sshfs -o follow_symlinks jz:/linkhome/rech/genscp01/uml34gj /home/ljalouzot/data/jz"
+  alias mount-jz-cea="sshfs -o follow_symlinks jz-cea:/linkhome/rech/genscp01/uml34gj /home/ljalouzot/data/jz"
+  alias mount-jz-karavela="sshfs -o follow_symlinks jz-karavela:/linkhome/rech/genscp01/uml34gj /home/ljalouzot/data/jz"
   alias mount-coml="sshfs -o follow_symlinks oberon:/scratch2/ljalouzot /home/ljalouzot/data/coml"
+  alias mount-nautilus="sshfs -o follow_symlinks nautilus:/neurospin/tmp/ljalouzot /home/ljalouzot/data/nautilus"
 fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.

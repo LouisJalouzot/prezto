@@ -69,6 +69,7 @@ alias gcm="git commit -m"
 alias gpl="git pull"
 alias gplr="git pull --rebase"
 alias gps="git push"
+alias restart_plasmashell="systemctl --user restart plasma-plasmashell"
 
 function llmg() {
   llm "$@" | glow -
@@ -130,6 +131,12 @@ if [[ "$(hostname)" == "ljalouzot" ]]; then
 fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+
+# Ensure virtualenv python version is shown in the prompt
+export POWERLEVEL9K_VIRTUALENV_SHOW_PYTHON_VERSION=true
+
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # [[ ! -f ~/.conda_setup.sh ]] || source ~/.conda_setup.sh
+# opencode
+export PATH=/home/ljalouzot/.opencode/bin:$PATH

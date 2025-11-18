@@ -10,3 +10,5 @@ if [[ ( "$SHLVL" -eq 1 && ! -o LOGIN ) && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; t
   source "${ZDOTDIR:-$HOME}/.zprofile"
 fi
 . "$HOME/.cargo/env"
+
+if [ -e /home/ljalouzot/.nix-profile/etc/profile.d/nix.sh ]; then . /home/ljalouzot/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
